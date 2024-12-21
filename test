@@ -40,3 +40,236 @@ class Program
         messagePrinter.PrintMessage(message);
     }
 }
+using System;
+using System.Collections.Generic;
+
+// Abstract base class representing a generic shape
+public abstract class Shape
+{
+    // Abstract method to calculate the area of the shape
+    public abstract double Area();
+}
+
+// Class representing a circle, derived from Shape
+public class Circle : Shape
+{
+    // Property to store the radius of the circle
+    public double Radius { get; set; }
+
+    // Override the Area method to calculate the area of the circle
+    public override double Area() => Math.PI * Radius * Radius;
+}
+
+// Class representing a rectangle, derived from Shape
+public class Rectangle : Shape
+{
+    // Property to store the width of the rectangle
+    public double Width { get; set; }
+
+    // Property to store the height of the rectangle
+    public double Height { get; set; }
+
+    // Override the Area method to calculate the area of the rectangle
+    public override double Area() => Width * Height;
+}
+
+// Main program class
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create a list to store different shapes
+        List<Shape> shapes = new List<Shape>();
+
+        // Add a circle with a radius of 5 to the list
+        shapes.Add(new Circle { Radius = 5 });
+
+        // Add a rectangle with a width of 4 and height of 6 to the list
+        shapes.Add(new Rectangle { Width = 4, Height = 6 });
+
+        // Iterate through each shape in the list
+        foreach (var shape in shapes)
+        {
+            // Print the type of the shape and its area
+            Console.WriteLine($"Shape: {shape.GetType().Name}, Area: {shape.Area()}");
+        }
+    }
+}
+using System;
+using System.Collections.Generic;
+
+// Interface representing flyable behavior
+public interface IFlyable
+{
+    void Fly();
+}
+
+// Base class representing a generic bird
+public abstract class Bird
+{
+    // Common properties or methods for all birds can be added here
+}
+
+// Class representing a sparrow, derived from Bird and implementing IFlyable
+public class Sparrow : Bird, IFlyable
+{
+    // Implement the Fly method for sparrows
+    public void Fly() => Console.WriteLine("Sparrow is flying");
+}
+
+// Class representing an ostrich, derived from Bird
+public class Ostrich : Bird
+{
+    // Ostriches do not implement IFlyable because they cannot fly
+}
+
+// Main program class
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create a list to store different birds
+        List<Bird> birds = new List<Bird>();
+
+        // Add a sparrow to the list
+        birds.Add(new Sparrow());
+
+        // Add an ostrich to the list
+        birds.Add(new Ostrich());
+
+        // Iterate through each bird in the list
+        foreach (var bird in birds)
+        {
+            // Check if the bird can fly
+            if (bird is IFlyable flyableBird)
+            {
+                // Make the bird fly
+                flyableBird.Fly();
+            }
+            else
+            {
+                // Handle birds that cannot fly
+                Console.WriteLine($"{bird.GetType().Name} can't fly");
+            }
+        }
+    }
+}
+
+using System;
+
+// Interface for printing functionality
+public interface IPrinter
+{
+    // Method to print documents
+    void Print();
+}
+
+// Interface for scanning functionality
+public interface IScanner
+{
+    // Method to scan documents
+    void Scan();
+}
+
+// Class representing a multi-function printer that implements both IPrinter and IScanner
+public class MultiFunctionPrinter : IPrinter, IScanner
+{
+    // Implement the Print method from IPrinter
+    public void Print() => Console.WriteLine("Printing");
+
+    // Implement the Scan method from IScanner
+    public void Scan() => Console.WriteLine("Scanning");
+}
+
+// Class representing a simple printer that only implements IPrinter
+public class SimplePrinter : IPrinter
+{
+    // Implement the Print method from IPrinter
+    public void Print() => Console.WriteLine("Printing");
+}
+
+// Class representing a simple scanner that only implements IScanner
+public class SimpleScanner : IScanner
+{
+    // Implement the Scan method from IScanner
+    public void Scan() => Console.WriteLine("Scanning");
+}
+
+// Main program class
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create an instance of MultiFunctionPrinter
+        MultiFunctionPrinter mfp = new MultiFunctionPrinter();
+        mfp.Print(); // Output: Printing
+        mfp.Scan();  // Output: Scanning
+
+        // Create an instance of SimplePrinter
+        SimplePrinter printer = new SimplePrinter();
+        printer.Print(); // Output: Printing
+
+        // Create an instance of SimpleScanner
+        SimpleScanner scanner = new SimpleScanner();
+        scanner.Scan(); // Output: Scanning
+    }
+}
+using System;
+
+// Interface representing a message sender
+public interface IMessageSender
+{
+    // Method to send a message
+    void SendMessage(string message);
+}
+
+// Class representing an email sender, implementing IMessageSender
+public class EmailSender : IMessageSender
+{
+    // Implement the SendMessage method to send an email
+    public void SendMessage(string message) => Console.WriteLine("Email sent: " + message);
+}
+
+// Class representing an SMS sender, implementing IMessageSender
+public class SmsSender : IMessageSender
+{
+    // Implement the SendMessage method to send an SMS
+    public void SendMessage(string message) => Console.WriteLine("SMS sent: " + message);
+}
+
+// High-level module representing a notification
+public class Notification
+{
+    // Dependency on the abstraction IMessageSender
+    private readonly IMessageSender _messageSender;
+
+    // Constructor to inject the dependency
+    public Notification(IMessageSender messageSender)
+    {
+        _messageSender = messageSender;
+    }
+
+    // Method to send a notification
+    public void Send(string message) => _messageSender.SendMessage(message);
+}
+
+// Main program class
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create an instance of EmailSender
+        IMessageSender emailSender = new EmailSender();
+        
+        // Create an instance of Notification with EmailSender
+        Notification emailNotification = new Notification(emailSender);
+        emailNotification.Send("Hello via Email!"); // Output: Email sent: Hello via Email!
+
+        // Create an instance of SmsSender
+        IMessageSender smsSender = new SmsSender();
+        
+        // Create an instance of Notification with SmsSender
+        Notification smsNotification = new Notification(smsSender);
+        smsNotification.Send("Hello via SMS!"); // Output: SMS sent: Hello via SMS!
+    }
+}
